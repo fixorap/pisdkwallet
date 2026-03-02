@@ -1,8 +1,8 @@
- const https = require("https");
+const https = require("https");
  
  function readJsonBody(event) {
   try {
-    if (!event || !event.body) return {};
+    if (!event  !event.body) return {};
     return JSON.parse(event.body);
   } catch (e) {
     return {};
@@ -16,8 +16,8 @@
       const opts = {
         method,
         hostname: u.hostname,
-        path: u.pathname + (u.search || ""),
-        headers: headers || {},
+        path: u.pathname + (u.search  ""),
+        headers: headers  {},
       };
  
       const req = https.request(opts, (res) => {
@@ -26,7 +26,7 @@
           data += chunk;
         });
         res.on("end", () => {
-          resolve({ statusCode: res.statusCode || 0, body: data });
+          resolve({ statusCode: res.statusCode  0, body: data });
         });
       });
       req.on("error", reject);
@@ -65,7 +65,7 @@
     });
   } catch (e) {}
  
-  if (!event || event.httpMethod !== "POST") {
+  if (!event  event.httpMethod !== "POST") {
     return json(405, { ok: false, error: "Method not allowed" });
   }
  
@@ -76,8 +76,8 @@
  
   const body = readJsonBody(event);
   const paymentIdValue =
-    (body && (body.paymentId || body.identifier || body.id || body.payment_id)) ||
-    (body && body.paymentDTO && (body.paymentDTO.identifier || body.paymentDTO.paymentId || body.paymentDTO.id)) ||
+    (body && (body.paymentId  body.identifier  body.id  body.payment_id)) 
+    (body && body.paymentDTO && (body.paymentDTO.identifier  body.paymentDTO.paymentId  body.paymentDTO.id)) 
     "";
   const paymentId = paymentIdValue ? String(paymentIdValue) : "";
  
@@ -96,7 +96,7 @@
       "POST",
       url,
       {
-        Authorization: `Key ${apiKey}`,
+        Authorization: Key ${apiKey},
         "Content-Type": "application/json",
         "Content-Length": "0",
       },
@@ -107,15 +107,15 @@
       console.log("pi-cancel pi-api response", { statusCode: r.statusCode });
     } catch (e) {}
  
-    if (r.statusCode < 200 || r.statusCode >= 300) {
-      return json(r.statusCode || 500, { ok: false, error: "Cancel failed", details: r.body || "" });
+    if (r.statusCode < 200  r.statusCode >= 300) {
+      return json(r.statusCode  500, { ok: false, error: "Cancel failed", details: r.body  "" });
     }
  
-    return json(200, { ok: true, details: r.body || "" });
+    return json(200, { ok: true, details: r.body  "" });
   } catch (e) {
     try {
-      console.log("pi-cancel error", String((e && e.message) || e || ""));
+      console.log("pi-cancel error", String((e && e.message)  e  ""));
     } catch (ee) {}
-    return json(500, { ok: false, error: "Cancel error", details: String((e && e.message) || e || "") });
+    return json(500, { ok: false, error: "Cancel error", details: String((e && e.message)  e  "") });
   }
  };
